@@ -1,4 +1,5 @@
 import os
+import pathlib
 import sys
 from datetime import datetime
 from tqdm import tqdm
@@ -27,6 +28,16 @@ def logo():
 
 
 def menu():
+    print(Fore.RED + '[EXIT] -> 0')
+    print(Fore.CYAN + '[COMBO SORTER] -> 1')
+    print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> 2')
+    print('')
+    selection = input(Fore.LIGHTCYAN_EX + '[OPTION]: ')
+    print(Fore.RESET)
+    return selection
+
+
+def file_select():
     print('')
     print('[SELECT COMBO FILE]')
     print('')
@@ -56,32 +67,71 @@ def menu():
                 continue
 
             else:
-                closing(message="Goodbye!", sleep_time=3)
+                closing(message="Goodbye!", sleep_time=2)
 
-    sort(combo_filename)  # sortowanie email przez 'gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.'
+    return combo_filename  # sortowanie email przez 'gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.'
 
 
-def sort(combo_filename):
+def splitter(line):
+    null_email = 0
+    null_pass = 0
+
+    line = line.replace(';', ':')
+    table = line.split(':')
+
+    email = table[0]
+    email = email.lower()
+
+    try:
+        password = table[1]
+    except IndexError:
+        null_pass += 1
+        password = 'null'
+
+    # split domain
+    d_split = email.split('@')
+
+    try:
+        domain = d_split[1]
+
+    except IndexError:
+        null_email += 1
+        domain = '###NULL###'
+
+    return email, password, domain, d_split
+
+
+def check_dir():
+    data_folder_name = 'DATA'
+    time_folder_name = datetime.now().strftime("%d%m%Y_%H%M%S")
+    data_folder = pathlib.Path(data_folder_name)
+    if not data_folder.exists():
+        os.mkdir('DATA')
+
+    time_folder = pathlib.Path('DATA/' + time_folder_name)
+    if not time_folder.exists():
+        os.mkdir('DATA/' + datetime.now().strftime("%d%m%Y_%H%M%S"))
+
+    return data_folder, time_folder, data_folder_name, time_folder_name
+
+
+def sort():
     banned_emails = ['gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.', '###NULL###']
     sorted_table_wo_banned = []
-    semi_loaded_combo = []
     dumped_email = []
     domain_table = []
     split_symbol = ':'
     null_email = 0
     null_pass = 0
     count = 0
-    line_counter = 0
-    local_line_counter = 0
-    end_of_file_check = True
     new_line = bytes([0x0A])
 
-    file = open(combo_filename, encoding='utf-8')
-    sorted_combolist = open(str(datetime.date(datetime.now())) + ' [SORTED COMBO].txt', 'wb')
+    data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
-    dumped_combo = open('dumped.txt', 'wb')
-
-    domain_list = open('domains.txt', 'wb')
+    file = open(file_select(), encoding='utf-8')
+    sorted_combolist = open(data_folder_name + '/' + time_folder_name + '/COMBOTOOLS.txt', 'wb')
+    dumped_combo = open(data_folder_name + '/' + time_folder_name + '/dumped.txt', 'wb')
+    domain_list = open(data_folder_name + '/' + time_folder_name + '/domains.txt', 'wb')
 
     # lines = file.read().splitlines()
 
@@ -91,27 +141,7 @@ def sort(combo_filename):
         count += 1
         count_sorted += 1
 
-        line = line.replace(';', ':')
-        table = line.split(':')
-
-        email = table[0]
-        email = email.lower()
-
-        try:
-            password = table[1]
-        except IndexError:
-            null_pass += 1
-            password = 'null'
-
-        # split domain
-        d_split = email.split('@')
-
-        try:
-            domain = d_split[1]
-
-        except IndexError:
-            null_email += 1
-            domain = '###NULL###'
+        email, password, domain, d_split = splitter(line)
 
         check_ban = 0
 
@@ -139,9 +169,6 @@ def sort(combo_filename):
             count_sorted = 0  # reset licznika
             sorted_table_wo_banned = []  # czyszczenie tabeli
 
-        if line_counter == len(file.readlines()):
-            end_of_file_check = False
-
     #
     # END OF WHILE LOOP
     #
@@ -160,11 +187,60 @@ def sort(combo_filename):
     input('Done! Press any key...')
 
 
+def domains_to_yopmail():
+    complete = []
+    split_symbol = ':'
+    count = 0
+    check_error = 0
+
+    data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
+
+    yopmail_domains = open(data_folder_name + '/' + time_folder_name + '/domains to yopmain [COMBOEDITOR].txt', 'wb')
+    file = open(file_select(), encoding='utf-8')
+
+    for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
+                     bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
+
+        count += 1
+
+        email, password, domain, d_split = splitter(line)
+        try:
+            d_split[1] = 'yopmail.fr'
+        except:
+            check_error = 1
+
+        try:
+            if check_error == 0:
+                email = d_split[0] + '@' + d_split[1]
+        except:
+            check_error = 1
+
+        if check_error == 0:
+            complete.append(email + split_symbol + password)
+
+        if count > 100000:
+            for combo_line in complete:
+                yopmail_domains.write(combo_line.encode('utf-8', 'ignore'))
+            count = 0
+            complete = []
+
+
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
-    __version__ = '0.2.5'
+    __version__ = '0.3.2'
 
     os.system("title " + __title__)
 
     logo()  # wyswietl logo
-    menu()  # menu wyboru
+
+    selector = menu()
+
+    if selector == '1':
+        sort()
+
+    elif selector == '2':
+        domains_to_yopmail()
+
+    else:
+        closing(message="Goodbye!", sleep_time=2)
+
