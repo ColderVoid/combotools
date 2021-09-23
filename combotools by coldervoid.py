@@ -27,7 +27,7 @@ def logo():
     print('')
 
 
-def menu():
+def select():
     print('')
     print('[SELECT COMBO FILE]')
     print('')
@@ -70,14 +70,23 @@ def sort(combo_filename):
     split_symbol = ':'
     null_email = 0
     null_pass = 0
+<<<<<<< Updated upstream
     new_line = bytes([0x0A])
 
     combolist = open(combo_filename, encoding='utf-8')
     sorted_combolist = open(str(datetime.date(datetime.now())) + ' [SORTED COMBO].txt', 'wb')
+=======
+    count = 0
+    line_counter = 0
+    new_line = bytes([0x0A])
 
-    dumped_combo = open('dumped.txt', 'wb')
+    file = open(combo_filename, encoding='utf-8')
+    sorted_combolist = open('DATA/' + ' [SORTED COMBO].txt', 'wb')
+>>>>>>> Stashed changes
 
-    domain_list = open('domains.txt', 'wb')
+    dumped_combo = open('DATA/dumped.txt', 'wb')
+
+    domain_list = open('DATA/domains.txt', 'wb')
 
     linijki = combolist.read().splitlines()
 
@@ -157,4 +166,4 @@ if __name__ == '__main__':
     system("title " + __title__)
 
     logo()  # wyswietl logo
-    menu()  # menu wyboru
+    select()  # menu wyboru
