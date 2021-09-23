@@ -3,7 +3,6 @@ import sys
 from datetime import datetime
 from tqdm import tqdm
 from colorama import Fore
-from os import system
 import time
 import easygui
 
@@ -27,7 +26,7 @@ def logo():
     print('')
 
 
-def select():
+def menu():
     print('')
     print('[SELECT COMBO FILE]')
     print('')
@@ -65,34 +64,29 @@ def select():
 def sort(combo_filename):
     banned_emails = ['gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.', '###NULL###']
     sorted_table_wo_banned = []
+    semi_loaded_combo = []
     dumped_email = []
     domain_table = []
     split_symbol = ':'
     null_email = 0
     null_pass = 0
-<<<<<<< Updated upstream
-    new_line = bytes([0x0A])
-
-    combolist = open(combo_filename, encoding='utf-8')
-    sorted_combolist = open(str(datetime.date(datetime.now())) + ' [SORTED COMBO].txt', 'wb')
-=======
     count = 0
     line_counter = 0
+    local_line_counter = 0
+    end_of_file_check = True
     new_line = bytes([0x0A])
 
     file = open(combo_filename, encoding='utf-8')
-    sorted_combolist = open('DATA/' + ' [SORTED COMBO].txt', 'wb')
->>>>>>> Stashed changes
+    sorted_combolist = open(str(datetime.date(datetime.now())) + ' [SORTED COMBO].txt', 'wb')
 
-    dumped_combo = open('DATA/dumped.txt', 'wb')
+    dumped_combo = open('dumped.txt', 'wb')
 
-    domain_list = open('DATA/domains.txt', 'wb')
+    domain_list = open('domains.txt', 'wb')
 
-    linijki = combolist.read().splitlines()
+    # lines = file.read().splitlines()
 
-    count = 0
     count_sorted = 0
-    for line in tqdm(linijki, desc="[COMBOS LEFT]", unit=' lines',
+    for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
         count += 1
         count_sorted += 1
@@ -145,6 +139,13 @@ def sort(combo_filename):
             count_sorted = 0  # reset licznika
             sorted_table_wo_banned = []  # czyszczenie tabeli
 
+        if line_counter == len(file.readlines()):
+            end_of_file_check = False
+
+    #
+    # END OF WHILE LOOP
+    #
+
     for o_combo in dumped_email:
         dumped_combo.write(o_combo.encode('utf-8', 'ignore') + new_line)
 
@@ -163,7 +164,7 @@ if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
     __version__ = '0.2.5'
 
-    system("title " + __title__)
+    os.system("title " + __title__)
 
     logo()  # wyswietl logo
-    select()  # menu wyboru
+    menu()  # menu wyboru
