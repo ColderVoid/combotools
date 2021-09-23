@@ -85,79 +85,59 @@ def sort(combo_filename):
 
     # lines = file.read().splitlines()
 
-    while end_of_file_check:
+    count_sorted = 0
+    for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
+                     bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
+        count += 1
+        count_sorted += 1
 
-        print('hello')
+        line = line.replace(';', ':')
+        table = line.split(':')
 
-        while True:
-            semi_loaded_combo.append(file.readline())
-            local_line_counter += 1
-            if local_line_counter > 999:
-                local_line_counter += 1
+        email = table[0]
+        email = email.lower()
+
+        try:
+            password = table[1]
+        except IndexError:
+            null_pass += 1
+            password = 'null'
+
+        # split domain
+        d_split = email.split('@')
+
+        try:
+            domain = d_split[1]
+
+        except IndexError:
+            null_email += 1
+            domain = '###NULL###'
+
+        check_ban = 0
+
+        for single_domain in banned_emails:
+            if single_domain in domain:
+                check_ban = 0
                 break
-            elif 1000 == local_line_counter < 2000:
-                break
-
-        count = 0
-        print('apiwgnoiawng')
-        count_sorted = 0
-        for line in tqdm(semi_loaded_combo, desc="[COMBOS LEFT]", unit=' lines',
-                         bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
-            count += 1
-            count_sorted += 1
-
-            line = line.replace(';', ':')
-            table = line.split(':')
-
-            email = table[0]
-            email = email.lower()
-
-            try:
-                password = table[1]
-            except IndexError:
-                null_pass += 1
-                password = 'null'
-
-            # split domain
-            d_split = email.split('@')
-
-            try:
-                domain = d_split[1]
-
-            except IndexError:
-                null_email += 1
-                domain = '###NULL###'
-
-            check_ban = 0
-
-            for single_domain in banned_emails:
-                if single_domain in domain:
-                    check_ban = 0
-                    break
-
-                else:
-                    check_ban = 1
-
-            if check_ban == 1:
-                sorted_table_wo_banned.append(email + split_symbol + password)
 
             else:
-                dumped_email.append(email + split_symbol + password)
+                check_ban = 1
 
-            if domain not in domain_table:
-                domain_table.append(domain)
+        if check_ban == 1:
+            sorted_table_wo_banned.append(email + split_symbol + password)
 
-                # zapisywanie co 100k do pliku
-            if count_sorted > 100000:
-                for o_combo in sorted_table_wo_banned:
-                    sorted_combolist.write(o_combo.encode('utf-8', 'ignore') + new_line)
-                count_sorted = 0  # reset licznika
-                sorted_table_wo_banned = []  # czyszczenie tabeli
+        else:
+            dumped_email.append(email + split_symbol + password)
 
-        # semi_loaded_combo = []  # wyczyszczenie tabeli
+        if domain not in domain_table:
+            domain_table.append(domain)
 
-        print(line_counter)
-        print(local_line_counter)
+            # zapisywanie co 100k do pliku
+        if count_sorted > 100000:
+            for o_combo in sorted_table_wo_banned:
+                sorted_combolist.write(o_combo.encode('utf-8', 'ignore') + new_line)
+            count_sorted = 0  # reset licznika
+            sorted_table_wo_banned = []  # czyszczenie tabeli
 
         if line_counter == len(file.readlines()):
             end_of_file_check = False
