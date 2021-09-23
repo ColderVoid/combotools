@@ -224,6 +224,8 @@ def domains_to_yopmail():
             count = 0
             complete = []
 
+    input('Done! Press any key...')
+
 
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
