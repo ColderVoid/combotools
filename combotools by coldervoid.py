@@ -190,7 +190,6 @@ def domains_to_yopmail():
     complete = []
     split_symbol = ':'
     count = 0
-    check_error = 0
 
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
@@ -201,6 +200,7 @@ def domains_to_yopmail():
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
 
         count += 1
+        check_error = 0
 
         email, password, domain, d_split = splitter(line)
         try:
@@ -217,21 +217,22 @@ def domains_to_yopmail():
         if check_error == 0:
             complete.append(email + split_symbol + password)
 
-        if count > 100000:
+        if count >= 100000:
             for combo_line in complete:
                 yopmail_domains.write(combo_line.encode('utf-8', 'ignore'))
             count = 0
             complete = []
 
-    for combo_line in complete:
-        yopmail_domains.write(combo_line.encode('utf-8', 'ignore'))
+    if True:
+        for combo_line in complete:
+            yopmail_domains.write(combo_line.encode('utf-8', 'ignore'))
 
     input('Done! Press any key...')
 
 
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
-    __version__ = '0.3.3'
+    __version__ = '0.3.4'
 
     os.system("title " + __title__)
 
