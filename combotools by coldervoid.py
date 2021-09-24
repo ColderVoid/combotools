@@ -169,15 +169,14 @@ def sort():
             count_sorted = 0  # reset licznika
             sorted_table_wo_banned = []  # czyszczenie tabeli
 
-    #
-    # END OF WHILE LOOP
-    #
-
     for o_combo in dumped_email:
         dumped_combo.write(o_combo.encode('utf-8', 'ignore') + new_line)
 
     for o_domain_list in domain_table:
         domain_list.write(o_domain_list.encode('utf-8', 'ignore') + new_line)
+
+    for combo_line in sorted_table_wo_banned:
+        sorted_combolist.write(combo_line.encode('utf-8', 'ignore'))
 
     print('')
     print('[EMAIL SORTED]: ' + str(count))
@@ -224,12 +223,15 @@ def domains_to_yopmail():
             count = 0
             complete = []
 
+    for combo_line in complete:
+        yopmail_domains.write(combo_line.encode('utf-8', 'ignore'))
+
     input('Done! Press any key...')
 
 
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
-    __version__ = '0.3.2'
+    __version__ = '0.3.3'
 
     os.system("title " + __title__)
 
@@ -245,4 +247,3 @@ if __name__ == '__main__':
 
     else:
         closing(message="Goodbye!", sleep_time=2)
-
