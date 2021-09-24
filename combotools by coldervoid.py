@@ -48,7 +48,7 @@ def file_select():
 
         try:
             combo_filename = easygui.fileopenbox(title='Select combofile', filetypes='*.txt', multiple=False, )
-        except:
+        except Exception as e:
             print("Error.. Try again")
 
         if combo_filename is not None:
@@ -104,14 +104,14 @@ def splitter(line):
 
 def check_dir():
     data_folder_name = 'DATA'
-    time_folder_name = datetime.now().strftime("%d%m%Y_%H%M")
+    time_folder_name = datetime.now().strftime("%d-%m-%Y %H-%M")
     data_folder = pathlib.Path(data_folder_name)
     if not data_folder.exists():
         os.mkdir('DATA')
 
     time_folder = pathlib.Path('DATA/' + time_folder_name)
     if not time_folder.exists():
-        os.mkdir('DATA/' + datetime.now().strftime("%d%m%Y_%H%M"))
+        os.mkdir('DATA/' + datetime.now().strftime("%d-%m-%Y %H-%M"))
 
     return data_folder, time_folder, data_folder_name, time_folder_name
 
@@ -123,7 +123,6 @@ def checkbox(question):
     choice = easygui.multchoicebox(question, title, listOfOptions)
 
     choice.append('###NULL###')
-    print(choice)
 
     return choice
 
@@ -137,7 +136,6 @@ def sort():
     null_email = 0
     null_pass = 0
     count = 0
-    new_line = bytes([0x0A])
 
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
@@ -176,15 +174,15 @@ def sort():
             # zapisywanie co 100k do pliku
         if count_sorted > 100000:
             for o_combo in sorted_table_wo_banned:
-                sorted_combolist.write(o_combo.encode('utf-8', 'ignore') + new_line)
+                sorted_combolist.write(o_combo.encode('utf-8', 'ignore'))
             count_sorted = 0  # reset licznika
             sorted_table_wo_banned = []  # czyszczenie tabeli
 
     for o_combo in dumped_email:
-        dumped_combo.write(o_combo.encode('utf-8', 'ignore') + new_line)
+        dumped_combo.write(o_combo.encode('utf-8', 'ignore'))
 
     for o_domain_list in domain_table:
-        domain_list.write(o_domain_list.encode('utf-8', 'ignore') + new_line)
+        domain_list.write(o_domain_list.encode('utf-8', 'ignore'))
 
     for combo_line in sorted_table_wo_banned:
         sorted_combolist.write(combo_line.encode('utf-8', 'ignore'))
@@ -282,7 +280,7 @@ def email_to_user():
 
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
-    __version__ = '0.4.0'
+    __version__ = '0.4.1'
 
     os.system("title " + __title__)
 
