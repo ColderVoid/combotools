@@ -31,6 +31,7 @@ def menu():
     print(Fore.RED + '[EXIT] -> 0')
     print(Fore.CYAN + '[COMBO SORTER] -> 1')
     print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> 2')
+    print(Fore.CYAN + '[EMAIL:PASS to USER:PASS] -> 3')
     print('')
     selection = input(Fore.LIGHTCYAN_EX + '[OPTION]: ')
     print(Fore.RESET)
@@ -103,14 +104,14 @@ def splitter(line):
 
 def check_dir():
     data_folder_name = 'DATA'
-    time_folder_name = datetime.now().strftime("%d%m%Y_%H%M%S")
+    time_folder_name = datetime.now().strftime("%d%m%Y_%H%M")
     data_folder = pathlib.Path(data_folder_name)
     if not data_folder.exists():
         os.mkdir('DATA')
 
     time_folder = pathlib.Path('DATA/' + time_folder_name)
     if not time_folder.exists():
-        os.mkdir('DATA/' + datetime.now().strftime("%d%m%Y_%H%M%S"))
+        os.mkdir('DATA/' + datetime.now().strftime("%d%m%Y_%H%M"))
 
     return data_folder, time_folder, data_folder_name, time_folder_name
 
@@ -203,6 +204,7 @@ def domains_to_yopmail():
         check_error = 0
 
         email, password, domain, d_split = splitter(line)
+
         try:
             d_split[1] = 'yopmail.fr'
         except:
@@ -230,9 +232,47 @@ def domains_to_yopmail():
     input('Done! Press any key...')
 
 
+def email_to_user():
+    split_symbol = ':'
+    count = 0
+    complete = []
+    valid = ''
+
+    data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
+
+    user_pass = open(data_folder_name + '/' + time_folder_name + '/email to user [COMBOEDITOR].txt', 'wb')
+    file = open(file_select(), encoding='utf-8')
+
+    for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
+                     bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
+        count += 1
+        check_error = 0
+
+        email, password, domain, d_split = splitter(line)
+
+        try:
+            valid = d_split[0] + split_symbol + password
+        except:
+            check_error = 1
+            print('valid error')
+
+        if check_error == 0:
+            complete.append(valid)
+
+        if count >= 100000:
+            for combo_line in complete:
+                user_pass.write(combo_line.encode('utf-8', 'ignore'))
+            count = 0
+            complete = []
+
+    if True:
+        for combo_line in complete:
+            user_pass.write(combo_line.encode('utf-8', 'ignore'))
+
+
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
-    __version__ = '0.3.4'
+    __version__ = '0.4.0'
 
     os.system("title " + __title__)
 
@@ -245,6 +285,9 @@ if __name__ == '__main__':
 
     elif selector == '2':
         domains_to_yopmail()
+
+    elif selector == '3':
+        email_to_user()
 
     else:
         closing(message="Goodbye!", sleep_time=2)
