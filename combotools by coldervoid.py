@@ -116,8 +116,20 @@ def check_dir():
     return data_folder, time_folder, data_folder_name, time_folder_name
 
 
+def checkbox(question):
+    title = "COMBOEDITOR"
+    listOfOptions = ['gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.']
+
+    choice = easygui.multchoicebox(question, title, listOfOptions)
+
+    choice.append('###NULL###')
+    print(choice)
+
+    return choice
+
+
 def sort():
-    banned_emails = ['gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.', '###NULL###']
+    banned_emails = checkbox(question='Choose domains to sort: ')
     sorted_table_wo_banned = []
     dumped_email = []
     domain_table = []
@@ -133,8 +145,6 @@ def sort():
     sorted_combolist = open(data_folder_name + '/' + time_folder_name + '/COMBOTOOLS.txt', 'wb')
     dumped_combo = open(data_folder_name + '/' + time_folder_name + '/dumped.txt', 'wb')
     domain_list = open(data_folder_name + '/' + time_folder_name + '/domains.txt', 'wb')
-
-    # lines = file.read().splitlines()
 
     count_sorted = 0
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
