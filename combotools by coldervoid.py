@@ -187,6 +187,8 @@ def sort():
     for combo_line in sorted_table_wo_banned:
         sorted_combolist.write(combo_line.encode('utf-8', 'ignore'))
 
+    sorted_combolist.close()
+
     print('')
     print('[EMAIL SORTED]: ' + str(count))
     print('[COMBO ERRORS]: ' + str(null_email + null_pass))
@@ -237,6 +239,8 @@ def domains_to_yopmail():
         for combo_line in complete:
             yopmail_domains.write(combo_line.encode('utf-8', 'ignore'))
 
+    yopmail_domains.close()
+
     input('Done! Press any key...')
 
 
@@ -277,10 +281,12 @@ def email_to_user():
         for combo_line in complete:
             user_pass.write(combo_line.encode('utf-8', 'ignore'))
 
+    user_pass.close()
+
 
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
-    __version__ = '0.4.1'
+    __version__ = '0.4.2'
 
     os.system("title " + __title__)
 
