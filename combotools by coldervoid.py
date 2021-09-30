@@ -32,6 +32,7 @@ def menu():
     print(Fore.CYAN + '[COMBO SORTER] -> 1')
     print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> 2')
     print(Fore.CYAN + '[EMAIL:PASS to USER:PASS] -> 3')
+    print(Fore.CYAN + '[COMBO STATS] -> 4')
     print('')
     selection = input(Fore.LIGHTCYAN_EX + '[OPTION]: ')
     print(Fore.RESET)
@@ -47,7 +48,7 @@ def file_select():
         combo_filename = None
 
         try:
-            combo_filename = easygui.fileopenbox(title='Select combofile', filetypes='*.txt', multiple=False, )
+            combo_filename = easygui.fileopenbox(title='Select combofile', filetypes='*.txt', multiple=False)
         except Exception as e:
             print("Error.. Try again")
 
@@ -284,6 +285,10 @@ def email_to_user():
     user_pass.close()
 
 
+def stats():
+    print("stats")
+
+
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
     __version__ = '0.4.2'
@@ -302,6 +307,9 @@ if __name__ == '__main__':
 
     elif selector == '3':
         email_to_user()
+
+    elif selector == '4':
+        stats()
 
     else:
         closing(message="Goodbye!", sleep_time=2)
