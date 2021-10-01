@@ -285,8 +285,20 @@ def email_to_user():
     user_pass.close()
 
 
-def stats():
-    print("stats")
+def email_stats():
+    print("email stats")
+
+
+def combo_merge():
+    print("combo merge")
+
+
+def domain_change():
+    print("domain change")
+
+
+def file_split():
+    print("file split")
 
 
 if __name__ == '__main__':
@@ -309,7 +321,16 @@ if __name__ == '__main__':
         email_to_user()
 
     elif selector == '4':
-        stats()
+        email_stats()
+
+    elif selector == '5':
+        combo_merge()
+
+    elif selector == '6':
+        domain_change()
+
+    elif selector == '7':
+        file_split()
 
     else:
         closing(message="Goodbye!", sleep_time=2)
