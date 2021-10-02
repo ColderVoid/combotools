@@ -33,9 +33,14 @@ def menu():
     print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> 2')
     print(Fore.CYAN + '[EMAIL:PASS to USER:PASS] -> 3')
     print(Fore.CYAN + '[COMBO STATS] -> 4')
+    print(Fore.CYAN + '[COMBO MERGE] -> 5')
+    print(Fore.CYAN + '[DOMAIN CHANGE] -> 6')
+    print(Fore.CYAN + '[FILE SPLIT] -> 7')
+    print(Fore.CYAN + '[DUPLICATE REMOVER] -> 8')
     print('')
     selection = input(Fore.LIGHTCYAN_EX + '[OPTION]: ')
     print(Fore.RESET)
+
     return selection
 
 
@@ -105,11 +110,11 @@ def splitter(line):
 
 def check_dir():
     data_folder_name = 'DATA'
-    time_folder_name = datetime.now().strftime("%d-%m-%Y %H-%M")
     data_folder = pathlib.Path(data_folder_name)
     if not data_folder.exists():
         os.mkdir('DATA')
 
+    time_folder_name = datetime.now().strftime("%d-%m-%Y %H-%M")
     time_folder = pathlib.Path('DATA/' + time_folder_name)
     if not time_folder.exists():
         os.mkdir('DATA/' + datetime.now().strftime("%d-%m-%Y %H-%M"))
@@ -301,6 +306,10 @@ def file_split():
     print("file split")
 
 
+def remove_duplicates():
+    print("remove duplicates")
+
+
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
     __version__ = '0.4.2'
@@ -331,6 +340,9 @@ if __name__ == '__main__':
 
     elif selector == '7':
         file_split()
+
+    elif selector == '8':
+        remove_duplicates()
 
     else:
         closing(message="Goodbye!", sleep_time=2)
