@@ -49,7 +49,7 @@ def file_select():
 
         try:
             combo_filename = easygui.fileopenbox(title='Select combofile', filetypes='*.txt', multiple=False)
-        except Exception as e:
+        except:
             print("Error.. Try again")
 
         if combo_filename is not None:
