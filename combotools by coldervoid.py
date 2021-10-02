@@ -1,3 +1,18 @@
+#   ______________________
+#  /\                     \
+# /  \    _________________\
+# \   \   \                /
+#  \   \   \__________    /
+#   \   \   \    /   /   /
+#    \   \   \  /   /   /
+#     \   \   \/   /   /   Sleep well, and take care.
+#      \   \  /   /   /  ~coldervoid
+#       \   \/   /   /
+#        \      /   /
+#         \    /   /
+#          \  /   /
+#           \/___/
+
 import os
 import pathlib
 import sys
@@ -128,6 +143,9 @@ def check_dir():
 def checkbox(question):
     title = "COMBOTOOLS"
     listOfOptions = ['gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.']
+
+    if __DEBUG__:
+        listOfOptions.append('yopmail.')
 
     choice = easygui.multchoicebox(question, title, listOfOptions)
 
@@ -275,7 +293,6 @@ def email_to_user():
             valid = d_split[0] + split_symbol + password
         except:
             check_error = 1
-            print('valid error')
 
         if check_error == 0:
             complete.append(valid)
@@ -291,28 +308,94 @@ def email_to_user():
             user_pass.write(combo_line.encode('utf-8', 'ignore'))
 
     user_pass.close()
+    input('Done! Press any key...')
 
 
 def email_stats():
-    split_symbol = ':'
     count = 0
 
-    gmail = []
-    hotmail = []
-    yahoo = []
-    aol = []
-    live = []
-    outlook = []
-    msn = []
-    yandex = []
-    protonmail = []
-    yopmail = []
-    others = []
+    gmail = 0
+    hotmail = 0
+    yahoo = 0
+    aol = 0
+    live = 0
+    outlook = 0
+    msn = 0
+    yandex = 0
+    protonmail = 0
+    yopmail = 0
+    others = 0
 
-    data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
-
-    email_stats_file = open(data_folder_name + '/' + time_folder_name + '/email stats [COMBOTOOLS].txt', 'wb')
     file = open(file_select(), encoding='utf-8')
+
+    for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
+                     bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
+        count += 1
+
+        email, password, domain, d_split = splitter(line)
+
+        try:
+            domain = d_split[1]
+
+        except IndexError:
+            domain = '###NULL###'
+
+        if 'gmail.' in domain:
+            gmail += 1
+
+        elif 'hotmail.' in domain:
+            hotmail += 1
+
+        elif 'yahoo.' in domain:
+            yahoo += 1
+
+        elif 'aol.' in domain:
+            aol += 1
+
+        elif 'live.' in domain:
+            live += 1
+
+        elif 'outlook.' in domain:
+            outlook += 1
+
+        elif 'msn.' in domain:
+            msn += 1
+
+        elif 'yandex.' in domain:
+            yandex += 1
+
+        elif 'protonmail.' in domain:
+            protonmail += 1
+
+        elif 'pm.' in domain:
+            protonmail += 1
+
+        elif 'yopmail.' in domain and __DEBUG__:
+            yopmail += 1
+
+        else:
+            others += 1
+
+    print(Fore.RESET + '')
+    print(Fore.GREEN + '[GMAIL]: ' + str(gmail))
+    print(Fore.GREEN + '[HOTMAIL]: ' + str(hotmail))
+    print(Fore.GREEN + '[YAHOO]: ' + str(yahoo))
+    print(Fore.GREEN + '[AOL]: ' + str(aol))
+    print(Fore.GREEN + '[LIVE]: ' + str(live))
+    print(Fore.GREEN + '[OUTLOOK]: ' + str(outlook))
+    print(Fore.GREEN + '[MSN]: ' + str(msn))
+    print(Fore.GREEN + '[YANDEX]: ' + str(yandex))
+    print(Fore.GREEN + '[PROTONMAIL]: ' + str(protonmail))
+
+    if __DEBUG__:
+        print(Fore.RESET + '')
+        print(Fore.CYAN + '[YOPMAIL]: ' + str(yopmail))
+
+    print(Fore.RESET + '')
+    print(Fore.RED + '[OTHERS]: ' + str(others))
+    print(Fore.RESET + '')
+
+    input('Done! Press any key...')
 
 
 def combo_merge():
@@ -333,11 +416,11 @@ def remove_duplicates():
 
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
-    __version__ = '0.4.2 -> 0.9.0'
+    __version__ = '0.5.1 -> 0.9.0'
     __DEBUG__ = False
 
     try:
-        code = sys.argv[0]
+        code = sys.argv[1]
     except:
         __DEBUG__ = False
     else:
