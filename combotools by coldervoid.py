@@ -30,13 +30,16 @@ def logo():
 def menu():
     print(Fore.RED + '[EXIT] -> 0')
     print(Fore.CYAN + '[COMBO SORTER] -> 1')
-    print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> 2')
-    print(Fore.CYAN + '[EMAIL:PASS to USER:PASS] -> 3')
-    print(Fore.CYAN + '[COMBO STATS] -> 4')
-    print(Fore.CYAN + '[COMBO MERGE] -> 5')
-    print(Fore.CYAN + '[DOMAIN CHANGE] -> 6')
-    print(Fore.CYAN + '[FILE SPLIT] -> 7')
-    print(Fore.CYAN + '[DUPLICATE REMOVER] -> 8')
+    print(Fore.CYAN + '[EMAIL:PASS to USER:PASS] -> 2')
+    print(Fore.CYAN + '[COMBO STATS] -> 3')
+    print(Fore.CYAN + '[COMBO MERGE] -> 4')
+    print(Fore.CYAN + '[DOMAIN CHANGE] -> 5')
+    print(Fore.CYAN + '[FILE SPLIT] -> 6')
+    print(Fore.CYAN + '[DUPLICATE REMOVER] -> 7')
+
+    if __DEBUG__:
+        print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> x')
+
     print('')
     selection = input(Fore.LIGHTCYAN_EX + '[OPTION]: ')
     print(Fore.RESET)
@@ -123,7 +126,7 @@ def check_dir():
 
 
 def checkbox(question):
-    title = "COMBOEDITOR"
+    title = "COMBOTOOLS"
     listOfOptions = ['gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.']
 
     choice = easygui.multchoicebox(question, title, listOfOptions)
@@ -210,7 +213,7 @@ def domains_to_yopmail():
 
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
-    yopmail_domains = open(data_folder_name + '/' + time_folder_name + '/domains to yopmain [COMBOEDITOR].txt', 'wb')
+    yopmail_domains = open(data_folder_name + '/' + time_folder_name + '/domains to yopmain [COMBOTOOLS].txt', 'wb')
     file = open(file_select(), encoding='utf-8')
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
@@ -258,7 +261,7 @@ def email_to_user():
 
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
-    user_pass = open(data_folder_name + '/' + time_folder_name + '/email to user [COMBOEDITOR].txt', 'wb')
+    user_pass = open(data_folder_name + '/' + time_folder_name + '/email to user [COMBOTOOLS].txt', 'wb')
     file = open(file_select(), encoding='utf-8')
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
@@ -291,7 +294,25 @@ def email_to_user():
 
 
 def email_stats():
-    print("email stats")
+    split_symbol = ':'
+    count = 0
+
+    gmail = []
+    hotmail = []
+    yahoo = []
+    aol = []
+    live = []
+    outlook = []
+    msn = []
+    yandex = []
+    protonmail = []
+    yopmail = []
+    others = []
+
+    data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
+
+    email_stats_file = open(data_folder_name + '/' + time_folder_name + '/email stats [COMBOTOOLS].txt', 'wb')
+    file = open(file_select(), encoding='utf-8')
 
 
 def combo_merge():
@@ -312,7 +333,18 @@ def remove_duplicates():
 
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
-    __version__ = '0.4.2'
+    __version__ = '0.4.2 -> 0.9.0'
+    __DEBUG__ = False
+
+    try:
+        code = sys.argv[0]
+    except:
+        __DEBUG__ = False
+    else:
+        if code == '81b672f9':
+            __DEBUG__ = True
+        else:
+            __DEBUG__ = False
 
     os.system("title " + __title__)
 
@@ -324,25 +356,25 @@ if __name__ == '__main__':
         sort()
 
     elif selector == '2':
-        domains_to_yopmail()
-
-    elif selector == '3':
         email_to_user()
 
-    elif selector == '4':
+    elif selector == '3':
         email_stats()
 
-    elif selector == '5':
+    elif selector == '4':
         combo_merge()
 
-    elif selector == '6':
+    elif selector == '5':
         domain_change()
 
-    elif selector == '7':
+    elif selector == '6':
         file_split()
 
-    elif selector == '8':
+    elif selector == '7':
         remove_duplicates()
+
+    elif selector == 'x' and __DEBUG__:
+        domains_to_yopmail()
 
     else:
         closing(message="Goodbye!", sleep_time=2)
