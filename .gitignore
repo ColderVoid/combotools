@@ -3,3 +3,4 @@
 *.txt
 BUILD/*
 *.spec
+*.pyc
