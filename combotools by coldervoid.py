@@ -94,7 +94,7 @@ def file_select():
             else:
                 closing(message="Goodbye!", sleep_time=2)
 
-    return combo_filename  # sortowanie email przez 'gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.'
+    return combo_filename
 
 
 def splitter(line):
@@ -140,22 +140,114 @@ def check_dir():
     return data_folder, time_folder, data_folder_name, time_folder_name
 
 
-def checkbox(question):
+def checkbox(question, single):
     title = "COMBOTOOLS"
     listOfOptions = ['gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.']
 
     if __DEBUG__:
         listOfOptions.append('yopmail.')
 
-    choice = easygui.multchoicebox(question, title, listOfOptions)
+    while True:
+        choice = None
 
-    choice.append('###NULL###')
+        try:
+            if single:
+                choice = easygui.choicebox(question, title, listOfOptions)
+
+            else:
+                choice = easygui.multchoicebox(question, title, listOfOptions)
+                choice.append('###NULL###')
+        except:
+            print("Error.. Try again")
+
+        if choice is not None and single:
+            print('[SELECTED DOMAIN] -->  ' + choice)
+            print('')
+            print('')
+            break
+
+        elif choice is not None and not single:
+            break
+
+        else:
+            logo()
+
+            print('')
+            print("[CANCELED]")
+            option = input('[Try again? y/n]: ')
+
+            if option.lower() == 'y':
+                continue
+
+            else:
+                closing(message="Goodbye!", sleep_time=2)
+
+    return choice
+
+
+def inputbox(question):
+    title = "COMBOTOOLS"
+    dot_symbol = '.'
+    at_symbol = '@'
+
+    while True:
+        error = 0
+        var_check = 0
+        var = ''
+        choice = easygui.enterbox(question, title)
+
+        if choice is None:
+            error = 1
+
+        if choice is not None:
+            if at_symbol in choice or choice == '' or dot_symbol not in choice:
+                error = 1
+                logo()
+
+                if at_symbol in choice and var_check == 0:
+                    var = '   @ symbol detected!'
+                    var_check = 1
+
+                if choice == '' and var_check == 0:
+                    var = '   blank line detected!'
+                    var_check = 1
+
+                if dot_symbol not in choice and var_check == 0:
+                    var = '   domain does not contain dot!'
+
+                print('[INPUT ERROR]' + var)
+                option = input('[Try again? y/n]: ')
+
+                if option.lower() == 'y':
+                    continue
+
+                else:
+                    closing(message="Goodbye!", sleep_time=2)
+
+        if choice is not None and error == 0:
+            print('[TYPED DOMAIN] -->  ' + choice)
+            print('')
+            print('')
+            break
+
+        else:
+            logo()
+
+            print('')
+            print("[CANCELED]")
+            option = input('[Try again? y/n]: ')
+
+            if option.lower() == 'y':
+                continue
+
+            else:
+                closing(message="Goodbye!", sleep_time=2)
 
     return choice
 
 
 def sort():
-    banned_emails = checkbox(question='Choose domains to sort: ')
+    banned_emails = checkbox(question='Choose domains to sort: ', single=False)
     sorted_table_wo_banned = []
     dumped_email = []
     domain_table = []
@@ -167,7 +259,7 @@ def sort():
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
     file = open(file_select(), encoding='utf-8')
-    sorted_combolist = open(data_folder_name + '/' + time_folder_name + '/COMBOTOOLS.txt', 'wb')
+    sorted_combolist = open(data_folder_name + '/' + time_folder_name + '/single domain [COMBOTOOLS].txt', 'wb')
     dumped_combo = open(data_folder_name + '/' + time_folder_name + '/dumped.txt', 'wb')
     domain_list = open(data_folder_name + '/' + time_folder_name + '/domains.txt', 'wb')
 
@@ -313,7 +405,6 @@ def email_to_user():
 
 def email_stats():
     count = 0
-
     gmail = 0
     hotmail = 0
     yahoo = 0
@@ -400,23 +491,81 @@ def email_stats():
 
 def combo_merge():
     print("combo merge")
+    #
+
+    #    TODO  combo_merge
+
+    #
 
 
 def domain_change():
-    print("domain change")
+    count = 0
+    count_sorted = 0
+    complete = []
+    split_symbol = ':'
+    combo = ''
+
+    data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
+
+    file = open(file_select(), encoding='utf-8')
+    changed_domain = open(data_folder_name + '/' + time_folder_name + '/changed domain [COMBOTOOLS].txt', 'wb')
+
+    domain_to_change = inputbox(question='Type domain: ')
+
+    for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
+                     bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
+        count += 1
+        count_sorted += 1
+        check_ban = 0
+
+        email, password, domain, d_split = splitter(line)
+
+        try:
+            combo = d_split[0] + '@' + domain_to_change + split_symbol + password
+        except:
+            check_ban = 1
+
+        if check_ban == 0:
+            complete.append(combo)
+
+        if count >= 100000:
+            for combo_line in complete:
+                changed_domain.write(combo_line.encode('utf-8', 'ignore'))
+            count = 0
+            complete = []
+
+    if True:
+        for combo_line in complete:
+            changed_domain.write(combo_line.encode('utf-8', 'ignore'))
+
+    changed_domain.close()
+
+    input('Done! Press any key...')
 
 
 def file_split():
     print("file split")
 
+    #
+
+    #    TODO  file_split
+
+    #
+
 
 def remove_duplicates():
     print("remove duplicates")
 
+    #
+
+    #    TODO  remove_duplicates
+
+    #
+
 
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
-    __version__ = '0.5.1 -> 0.9.0'
+    __version__ = '0.6.7 -> 0.9.0'
     __DEBUG__ = False
 
     try:
