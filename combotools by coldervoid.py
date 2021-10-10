@@ -12,7 +12,7 @@
 #         \    /   /
 #          \  /   /
 #           \/___/
-
+import hashlib
 import os
 import pathlib
 import sys
@@ -56,7 +56,16 @@ def menu():
         print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> x')
 
     print('')
-    selection = input(Fore.LIGHTCYAN_EX + '[OPTION]: ')
+
+    while True:
+        selection = input(Fore.LIGHTCYAN_EX + '[OPTION]: ')
+
+        if len(selection) == 1:
+            break
+
+        print('Please enter only one character')
+        print('')
+
     print(Fore.RESET)
 
     return selection
@@ -490,12 +499,7 @@ def email_stats():
 
 
 def combo_merge():
-    print("combo merge")
-    #
-
-    #    TODO  combo_merge
-
-    #
+    count = 0
 
 
 def domain_change():
@@ -554,18 +558,49 @@ def file_split():
 
 
 def remove_duplicates():
-    print("remove duplicates")
+    removed = 0
+    stay = 0
+    uni_error = 0
 
-    #
+    data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
+    completed_lines_hash = set()
 
-    #    TODO  remove_duplicates
+    file = open(file_select(), encoding='utf-8')
+    wo_duplicates = open(data_folder_name + '/' + time_folder_name + '/removed duplicates [COMBOTOOLS].txt', 'w')
 
-    #
+    for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
+                     bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
+        hashValue = hashlib.md5(line.rstrip().encode('utf-8')).hexdigest()
+        if hashValue not in completed_lines_hash:
+            stay += 1
+
+            try:
+                wo_duplicates.write(line)
+            except UnicodeEncodeError:
+                uni_error += 1
+
+            completed_lines_hash.add(hashValue)
+        else:
+            removed += 1
+
+    wo_duplicates.close()
+
+    quotient_rem = removed / stay
+    quotient_err = uni_error / stay
+
+    prec_rem = quotient_rem * 100
+    prec_err = quotient_err * 100
+
+    print('stay ' + str(stay))
+    print('removed ' + str(removed) + ' (' + str(round(quotient_rem, 4)) + '%)')
+    print('uni error ' + str(uni_error) + ' (' + str(round(quotient_err, 4)) + '%)')
+
+    input('Done! Press any key...')
 
 
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
-    __version__ = '0.6.7 -> 0.9.0'
+    __version__ = '0.7.2 -> 0.9.0'
     __DEBUG__ = False
 
     try:
