@@ -20,6 +20,7 @@ from datetime import datetime
 from tqdm import tqdm
 from colorama import Fore
 import time
+import math
 import easygui
 
 
@@ -36,7 +37,7 @@ def logo():
     os.system('cls')
     print('')
     print(' __   __        __   ___  __        ___ ___       __   __       ')
-    print('/  ` /  \ |    |  \ |__  |__) |\ | |__   |  |  | /  \ |__) |__/ ' + '  ' + 'combotools')
+    print('/  ` /  \ |    |  \ |__  |__) |\ | |__   |  |  | /  \ |__) |__/ ' + '  ' + __index__)
     print('\__, \__/ |___ |__/ |___ |  \ | \| |___  |  |/\| \__/ |  \ |  \ ' + '  ' + 'version: ' + __version__)
     print('')
     print('')
@@ -561,12 +562,15 @@ def remove_duplicates():
     removed = 0
     stay = 0
     uni_error = 0
+    n_digits = 0
+    z_digits = 0
+    place = 0
 
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
     completed_lines_hash = set()
 
     file = open(file_select(), encoding='utf-8')
-    wo_duplicates = open(data_folder_name + '/' + time_folder_name + '/removed duplicates [COMBOTOOLS].txt', 'w')
+    wo_duplicates = open(data_folder_name + '/' + time_folder_name + '/removed duplicates [COMBOTOOLS].txt', 'wb')
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
@@ -575,8 +579,8 @@ def remove_duplicates():
             stay += 1
 
             try:
-                wo_duplicates.write(line)
-            except UnicodeEncodeError:
+                wo_duplicates.write(line.encode('utf-8', 'ignore'))
+            except:
                 uni_error += 1
 
             completed_lines_hash.add(hashValue)
@@ -591,15 +595,36 @@ def remove_duplicates():
     prec_rem = quotient_rem * 100
     prec_err = quotient_err * 100
 
-    print('stay ' + str(stay))
-    print('removed ' + str(removed) + ' (' + str(round(quotient_rem, 4)) + '%)')
-    print('uni error ' + str(uni_error) + ' (' + str(round(quotient_err, 4)) + '%)')
+    for digit in str(prec_rem):
+
+        try:
+            digit = int(digit)
+        except:
+            digit = 9
+
+        if digit == 0:
+            z_digits += 1
+        else:
+            n_digits += 1
+            if n_digits > 1:
+                place = n_digits + z_digits - 1
+                break
+
+    print(Fore.RESET + '')
+    print(Fore.GREEN + '[STAY]: ' + str(stay))
+    print(Fore.GREEN + '[REMOVED]: ' + str(removed) + ' (' + str(round(prec_rem, place)) + '%)')
+
+    if uni_error > 0:
+        print(Fore.RED + '[ENCODE ERROR]: ' + str(uni_error) + ' (' + str(round(prec_err, place)) + '%)')
+
+    print(Fore.RESET + '')
 
     input('Done! Press any key...')
 
 
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
+    __index__ = 'combotools'
     __version__ = '0.7.2 -> 0.9.0'
     __DEBUG__ = False
 
@@ -612,6 +637,10 @@ if __name__ == '__main__':
             __DEBUG__ = True
         else:
             __DEBUG__ = False
+
+    if __DEBUG__:
+        __title__ = __title__ + ' =DEBUG MODE='
+        __index__ = __index__ + ' =DEBUG MODE='
 
     os.system("title " + __title__)
 
