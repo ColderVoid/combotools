@@ -12,6 +12,7 @@
 #         \    /   /
 #          \  /   /
 #           \/___/
+
 import hashlib
 import os
 import pathlib
@@ -20,7 +21,6 @@ from datetime import datetime
 from tqdm import tqdm
 from colorama import Fore
 import time
-import math
 import easygui
 
 
@@ -55,6 +55,7 @@ def menu():
 
     if __DEBUG__:
         print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> x')
+        print(Fore.CYAN + '[WORDLIST COMBO] -> y')
 
     print('')
 
@@ -500,7 +501,13 @@ def email_stats():
 
 
 def combo_merge():
-    count = 0
+    print('combo merge')
+
+    #
+
+    #    TODO  file_split
+
+    #
 
 
 def domain_change():
@@ -622,10 +629,73 @@ def remove_duplicates():
     input('Done! Press any key...')
 
 
+def wordlist_combo():
+    split_symbol = ':'
+    fake_password = 'combotools'
+
+    fake_domain = inputbox(question='Type domain: ')
+    fake_domain = '@' + fake_domain
+
+    data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
+    complete = []
+
+    file_dest = file_select()
+    file = open(file_dest, encoding='ISO-8859-1')
+    file_complete = open(data_folder_name + '/' + time_folder_name + '/wordlist combo [COMBOTOOLS].txt', 'wb')
+
+    try:
+        memory_access = file.readlines()
+    except:
+        print(Fore.RED + '[!TOO BIG FILE!]')
+        print(Fore.RED + '[SIZE OF FILE]: ' + str(os.path.getsize(file_dest)) + ' bytes')
+        print('')
+        print(Fore.RED + '[EMERGENCY MODE]')
+        print('')
+        print(Fore.RED + '[NUMBER OF LINES NOT DETECTED]')
+        print(Fore.RESET + '')
+        memory_access = file
+
+    count = 0
+    count_sorted = 0
+
+    for line in tqdm(memory_access, desc="[COMBOS LEFT]", unit=' lines',
+                     bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
+        count += 1
+        count_sorted += 1
+        check_ban = 0
+        combo = 0
+
+        email, password, domain, d_split = splitter(line)
+        email = email.strip()
+
+        try:
+            combo = email + fake_domain + split_symbol + fake_password
+        except:
+            check_ban = 1
+
+        if check_ban == 0:
+            combo = str(combo) + '\n'
+            complete.append(combo)
+
+        if count >= 100000:
+            for combo_line in complete:
+                file_complete.write(combo_line.encode('utf-8', 'ignore'))
+            count = 0
+            complete = []
+
+    if True:
+        for combo_line in complete:
+            file_complete.write(combo_line.encode('utf-8', 'ignore'))
+
+    file_complete.close()
+
+    input('Done! Press any key...')
+
+
 if __name__ == '__main__':
     __title__ = 'combotools by COLDERVOID'
     __index__ = 'combotools'
-    __version__ = '0.7.2 -> 0.9.0'
+    __version__ = '0.8.0_alpha'
     __DEBUG__ = False
 
     try:
@@ -671,6 +741,8 @@ if __name__ == '__main__':
 
     elif selector == 'x' and __DEBUG__:
         domains_to_yopmail()
+    elif selector == 'y' and __DEBUG__:
+        wordlist_combo()
 
     else:
         closing(message="Goodbye!", sleep_time=2)
