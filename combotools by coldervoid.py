@@ -265,10 +265,7 @@ def donut():
 
     height = 24
     width = 80
-    # height=int(input("Enter Screen Height : "))
-    # width=int(input("Enter Screen Width : "))
 
-    # for clearing console (windows and unix systems)
     clear = "cls"
     if os.name == "posix":
         clear = "clear"
@@ -299,23 +296,14 @@ def donut():
                 mess = 1 / (sini * cosj2 * sinA + sinj * cosA + 5)
                 t = sini * cosj2 * cosA - sinj * sinA
 
-                # 40 is the left screen shift
                 x = int(40 + 30 * mess * (cosi * cosj2 * cosB - t * sinB))
-                # 12 is the down screen shift
                 y = int(11 + 15 * mess * (cosi * cosj2 * sinB + t * cosB))
-                # all are casted to int, ie floored
                 o = int(x + width * y)
-                # multiplying by 8 to bring in range 0-11 as 8*(sqrt(2))=11
-                # because we have 11 luminance characters
                 N = int(8 * ((sinj * sinA - sini * cosj * cosA) * cosB - sini * cosj * sinA - sinj * cosA - cosi * cosj * sinB))
-                # if x,y inside screen and previous z-buffer is < mess
-                # i.e. when z[o] is 0 or the prev point is behind the new point
-                # so we change it to the point nearer to the eye/ above prev point
                 if 0 < y < height and 0 < x < width and z[o] < mess:
                     z[o] = mess
                     screen[o] = ".,-~:;=!*#$@"[N if N > 0 else 0]
 
-        # prints
         os.system(clear)
         for index, char in enumerate(screen):
             if index % width == 0:
@@ -323,7 +311,6 @@ def donut():
             else:
                 print(char, end='')
 
-        # increments
         a += 0.04
         b += 0.02
 
@@ -702,7 +689,23 @@ def remove_duplicates():
 
 def wordlist_combo():
     split_symbol = ':'
-    fake_password = 'combotools'
+    fake_password = '0'
+
+    print(Fore.RESET)
+    combo_limit = input('[INPUT NUMBER OF LINES (zero for no-limit)]: ')
+    while True:
+        try:
+            combo_limit = int(combo_limit)
+            print('')
+            break
+        except:
+            os.system('cls')
+            logo()
+            print('')
+            print(Fore.RED + '[INPUT ERROR]')
+            combo_limit = input(Fore.RED + '[TRY AGAIN (type "ok" to exit)]: ' + Fore.RESET)
+            if combo_limit == 'ok':
+                closing(message="Goodbye!", sleep_time=2)
 
     fake_domain = inputbox(question='Type domain: ')
     fake_domain = '@' + fake_domain
@@ -754,6 +757,10 @@ def wordlist_combo():
             count = 0
             complete = []
 
+        if combo_limit != 0:
+            if count_sorted == combo_limit:
+                break
+
     if True:
         for combo_line in complete:
             file_complete.write(combo_line.encode('utf-8', 'ignore'))
@@ -764,9 +771,9 @@ def wordlist_combo():
 
 
 if __name__ == '__main__':
-    __title__ = 'combotools by COLDERVOID'
     __index__ = 'combotools'
-    __version__ = '0.8.0_alpha'
+    __title__ = __index__ + ' by COLDERVOID'
+    __version__ = '0.8.0_beta'
     __DEBUG__ = False
 
     try:
