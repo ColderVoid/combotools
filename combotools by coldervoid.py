@@ -259,6 +259,29 @@ def inputbox(question):
     return choice
 
 
+def round_func(prec):
+    n_digits = 0
+    z_digits = 0
+    place = 0
+
+    for digit in str(prec):
+
+        try:
+            digit = int(digit)
+        except:
+            digit = 9
+
+        if digit == 0:
+            z_digits += 1
+        else:
+            n_digits += 1
+            if n_digits > 1:
+                place = n_digits + z_digits - 1
+                break
+
+    return place
+
+
 def donut():
     a = 0
     b = 0
@@ -474,17 +497,7 @@ def email_to_user():
 
 def email_stats():
     count = 0
-    gmail = 0
-    hotmail = 0
-    yahoo = 0
-    aol = 0
-    live = 0
-    outlook = 0
-    msn = 0
-    yandex = 0
-    protonmail = 0
-    yopmail = 0
-    others = 0
+    domain_dict = {}
 
     file = open(file_select(), encoding='utf-8')
 
@@ -495,66 +508,38 @@ def email_stats():
         email, password, domain, d_split = splitter(line)
 
         try:
-            domain = d_split[1]
+            number = domain_dict[domain] + 1
+        except:
+            number = 1
 
-        except IndexError:
-            domain = '###NULL###'
+        domain_dict.update({domain: number})
 
-        if 'gmail.' in domain:
-            gmail += 1
+    domain_dict = sorted(domain_dict.items(), key=lambda item: item[1], reverse=True)
 
-        elif 'hotmail.' in domain:
-            hotmail += 1
+    show = input('[LINES TO SHOW]: ')
 
-        elif 'yahoo.' in domain:
-            yahoo += 1
+    try:
+        show = abs(int(show))
+    except:
+        print(Fore.RED + '[INPUT ERROR]')
+        print(Fore.RED + '[DEFAULT NUMBER]: 10')
+        print(Fore.RESET)
+        show = 10
 
-        elif 'aol.' in domain:
-            aol += 1
+    count_stat = 0
+    print(Fore.RESET + '')
+    for one_stat in domain_dict:
+        count_stat += 1
 
-        elif 'live.' in domain:
-            live += 1
+        quotient = int(one_stat[1]) / count
+        prec = quotient * 100
 
-        elif 'outlook.' in domain:
-            outlook += 1
+        print(Fore.GREEN + '[' + '@' + one_stat[0] + ']: ' + str(one_stat[1]) + ' (' + str(round(prec, round_func(prec))) + '%)')
 
-        elif 'msn.' in domain:
-            msn += 1
-
-        elif 'yandex.' in domain:
-            yandex += 1
-
-        elif 'protonmail.' in domain:
-            protonmail += 1
-
-        elif 'pm.' in domain:
-            protonmail += 1
-
-        elif 'yopmail.' in domain and __DEBUG__:
-            yopmail += 1
-
-        else:
-            others += 1
+        if count_stat == show:
+            break
 
     print(Fore.RESET + '')
-    print(Fore.GREEN + '[GMAIL]: ' + str(gmail))
-    print(Fore.GREEN + '[HOTMAIL]: ' + str(hotmail))
-    print(Fore.GREEN + '[YAHOO]: ' + str(yahoo))
-    print(Fore.GREEN + '[AOL]: ' + str(aol))
-    print(Fore.GREEN + '[LIVE]: ' + str(live))
-    print(Fore.GREEN + '[OUTLOOK]: ' + str(outlook))
-    print(Fore.GREEN + '[MSN]: ' + str(msn))
-    print(Fore.GREEN + '[YANDEX]: ' + str(yandex))
-    print(Fore.GREEN + '[PROTONMAIL]: ' + str(protonmail))
-
-    if __DEBUG__:
-        print(Fore.RESET + '')
-        print(Fore.CYAN + '[YOPMAIL]: ' + str(yopmail))
-
-    print(Fore.RESET + '')
-    print(Fore.RED + '[OTHERS]: ' + str(others))
-    print(Fore.RESET + '')
-
     input('Done! Press any key...')
 
 
@@ -773,7 +758,7 @@ def wordlist_combo():
 if __name__ == '__main__':
     __index__ = 'combotools'
     __title__ = __index__ + ' by COLDERVOID'
-    __version__ = '0.8.0_beta'
+    __version__ = '0.8.9_0'
     __DEBUG__ = False
 
     try:
