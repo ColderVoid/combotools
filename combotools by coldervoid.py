@@ -544,13 +544,21 @@ def email_stats():
 
 
 def combo_merge():
-    print('combo merge')
-
-    #
-
-    #    TODO  file_split
-
-    #
+    combo1 = input('First combolist file: ')
+    combo2 = input('Second combolist file: ') # You can add more, or maybe add an input to ask if the user wants to add more combos
+    comboos = combooos = ""
+    
+    with open(combo1) as fp:
+        comboos = fp.read()
+        
+    with open(combo2) as fp:
+        combooos = fp.read()
+        
+    comboos += "\n"
+    comboos += combooos
+    
+    with open('Merged.txt', 'w') as fp:
+        fp.write(combboos)
 
 
 def domain_change():
