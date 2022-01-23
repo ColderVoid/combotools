@@ -558,7 +558,7 @@ def combo_merge():
     comboos += combooos
     
     with open('Merged.txt', 'w') as fp:
-        fp.write(combboos)
+        fp.write(comboos)
 
 
 def domain_change():
