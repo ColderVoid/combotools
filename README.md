@@ -1,4 +1,4 @@
-##Functionalities:
+## Functionalities:
 
 - combo sorter
 - email:pass to user:pass
@@ -9,14 +9,15 @@
 - duplicate remover
 
 
-##DEBUG version:
+## DEBUG version:
 
 - yopmail tools
 - yopmail generator
 
 
-##Contact:
+## Contact:
 Telegram: https://t.me/coldervoid
 
+### Quote
 >Sleep well, and take care.
   ~coldervoid
