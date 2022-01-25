@@ -165,7 +165,6 @@ def check_dir():
 def checkbox(question, single):
     title = "COMBOTOOLS"
     listOfOptions = ['gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.']
-    easygui.choicebox(question, title, listOfOptions)
 
     if __DEBUG__:
         listOfOptions.append('yopmail.')
