@@ -75,7 +75,10 @@ def menu():
     return selection
 
 
-def file_select():
+def file_select(multiple, title):
+    if not title:
+        title = 'Select combofile'
+
     print('')
     print('[SELECT COMBO FILE]')
     print('')
@@ -84,15 +87,16 @@ def file_select():
         combo_filename = None
 
         try:
-            combo_filename = easygui.fileopenbox(title='Select combofile', filetypes='*.txt', multiple=False)
+            combo_filename = easygui.fileopenbox(title, filetypes='*.txt', multiple=multiple)
         except:
             print("Error.. Try again")
 
         if combo_filename is not None:
-            print('')
-            print('[SELECTED COMBO FILE] -->  ' + combo_filename)
-            print('')
-            print('')
+            if not multiple:
+                print('')
+                print('[SELECTED COMBO FILE] -->  ' + combo_filename)
+                print('')
+                print('')
             break
         else:
             logo()
@@ -282,6 +286,22 @@ def round_func(prec):
     return place
 
 
+def memory_access(file, file_dest):
+    try:
+        memory_access_a = file.readlines()
+    except:
+        print(Fore.RED + '[!TOO BIG FILE!]')
+        print(Fore.RED + '[SIZE OF FILE]: ' + str(os.path.getsize(file_dest)) + ' bytes')
+        print('')
+        print(Fore.RED + '[EMERGENCY MODE]')
+        print('')
+        print(Fore.RED + '[NUMBER OF LINES NOT DETECTED]')
+        print(Fore.RESET + '')
+        memory_access_a = file
+
+    return memory_access_a
+
+
 def donut():
     a = 0
     b = 0
@@ -322,7 +342,8 @@ def donut():
                 x = int(40 + 30 * mess * (cosi * cosj2 * cosB - t * sinB))
                 y = int(11 + 15 * mess * (cosi * cosj2 * sinB + t * cosB))
                 o = int(x + width * y)
-                N = int(8 * ((sinj * sinA - sini * cosj * cosA) * cosB - sini * cosj * sinA - sinj * cosA - cosi * cosj * sinB))
+                N = int(8 * ((
+                                     sinj * sinA - sini * cosj * cosA) * cosB - sini * cosj * sinA - sinj * cosA - cosi * cosj * sinB))
                 if 0 < y < height and 0 < x < width and z[o] < mess:
                     z[o] = mess
                     screen[o] = ".,-~:;=!*#$@"[N if N > 0 else 0]
@@ -350,7 +371,7 @@ def sort():
 
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
-    file = open(file_select(), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding='utf-8')
     sorted_combolist = open(data_folder_name + '/' + time_folder_name + '/single domain [COMBOTOOLS].txt', 'wb')
     dumped_combo = open(data_folder_name + '/' + time_folder_name + '/dumped.txt', 'wb')
     domain_list = open(data_folder_name + '/' + time_folder_name + '/domains.txt', 'wb')
@@ -416,7 +437,7 @@ def domains_to_yopmail():
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
     yopmail_domains = open(data_folder_name + '/' + time_folder_name + '/domains to yopmain [COMBOTOOLS].txt', 'wb')
-    file = open(file_select(), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding='utf-8')
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
@@ -464,7 +485,7 @@ def email_to_user():
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
     user_pass = open(data_folder_name + '/' + time_folder_name + '/email to user [COMBOTOOLS].txt', 'wb')
-    file = open(file_select(), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding='utf-8')
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
@@ -499,7 +520,7 @@ def email_stats():
     count = 0
     domain_dict = {}
 
-    file = open(file_select(), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding='utf-8')
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
@@ -534,7 +555,8 @@ def email_stats():
         quotient = int(one_stat[1]) / count
         prec = quotient * 100
 
-        print(Fore.GREEN + '[' + '@' + one_stat[0] + ']: ' + str(one_stat[1]) + ' (' + str(round(prec, round_func(prec))) + '%)')
+        print(Fore.GREEN + '[' + '@' + one_stat[0] + ']: ' + str(one_stat[1]) + ' (' + str(
+            round(prec, round_func(prec))) + '%)')
 
         if count_stat == show:
             break
@@ -544,21 +566,51 @@ def email_stats():
 
 
 def combo_merge():
-    combo1 = input('First combolist file: ')
-    combo2 = input('Second combolist file: ') # You can add more, or maybe add an input to ask if the user wants to add more combos
-    comboos = combooos = ""
-    
-    with open(combo1) as fp:
-        comboos = fp.read()
-        
-    with open(combo2) as fp:
-        combooos = fp.read()
-        
-    comboos += "\n"
-    comboos += combooos
-    
-    with open('Merged.txt', 'w') as fp:
-        fp.write(comboos)
+    count = 0
+    final_count = 0
+    c_error = 0
+    complete = []
+
+    print(Fore.RED + '[SELECT ALL FILES TO MERGE]')
+    print(Fore.RESET + '')
+    files = file_select(multiple=True, title='Select multiple combofiles')
+
+    data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
+    combo_final = open(data_folder_name + '/' + time_folder_name + '/merged combo [COMBOTOOLS].txt', 'wb')
+
+    for file_dest in files:
+
+        file = open(file_dest, encoding='ISO-8859-1')
+
+        print('')
+        print(Fore.GREEN + "File: " + file_dest + Fore.RESET)
+
+        memory_access_a = memory_access(file, file_dest)
+
+        for line in tqdm(memory_access_a, desc="[COMBOS LEFT]", unit=' lines',
+                         bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
+            count += 1
+            final_count += 1
+
+            try:
+                complete.append(line)
+            except:
+                c_error += 1
+
+            if count >= 100000:
+                for combo_line in complete:
+                    combo_final.write(combo_line.encode('utf-8', 'ignore'))
+                count = 0
+                complete = []
+
+    # stats
+    print('')
+    print('[LINES MERGED]: ' + str(final_count))
+    print('[ERRORS]: ' + str(c_error))
+    print('')
+
+    combo_final.close()
+    input('Done! Press any key...')
 
 
 def domain_change():
@@ -570,7 +622,7 @@ def domain_change():
 
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
-    file = open(file_select(), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding='utf-8')
     changed_domain = open(data_folder_name + '/' + time_folder_name + '/changed domain [COMBOTOOLS].txt', 'wb')
 
     domain_to_change = inputbox(question='Type domain: ')
@@ -627,7 +679,7 @@ def remove_duplicates():
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
     completed_lines_hash = set()
 
-    file = open(file_select(), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding='utf-8')
     wo_duplicates = open(data_folder_name + '/' + time_folder_name + '/removed duplicates [COMBOTOOLS].txt', 'wb')
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
@@ -706,26 +758,16 @@ def wordlist_combo():
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
     complete = []
 
-    file_dest = file_select()
+    file_dest = file_select(multiple=False, title=False)
     file = open(file_dest, encoding='ISO-8859-1')
     file_complete = open(data_folder_name + '/' + time_folder_name + '/wordlist combo [COMBOTOOLS].txt', 'wb')
 
-    try:
-        memory_access = file.readlines()
-    except:
-        print(Fore.RED + '[!TOO BIG FILE!]')
-        print(Fore.RED + '[SIZE OF FILE]: ' + str(os.path.getsize(file_dest)) + ' bytes')
-        print('')
-        print(Fore.RED + '[EMERGENCY MODE]')
-        print('')
-        print(Fore.RED + '[NUMBER OF LINES NOT DETECTED]')
-        print(Fore.RESET + '')
-        memory_access = file
+    memory_access_a = memory_access(file, file_dest)
 
     count = 0
     count_sorted = 0
 
-    for line in tqdm(memory_access, desc="[COMBOS LEFT]", unit=' lines',
+    for line in tqdm(memory_access_a, desc="[COMBOS LEFT]", unit=' lines',
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
         count += 1
         count_sorted += 1
