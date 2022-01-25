@@ -1,3 +1,5 @@
+##Only working with python 3.9.10 or lower
+
 ## Functionalities:
 
 - combo sorter
@@ -5,18 +7,17 @@
 - combo stats
 - combo merge
 - domain change
-- ~~file split~~
+- file split
 - duplicate remover
-
-
-## DEBUG version:
-
 - yopmail tools
-- yopmail generator
+- yopmail generator (from wordlist)
 
 
 ## Contact:
-Telegram: https://t.me/coldervoid
+- Telegram: https://t.me/coldervoid
+- Group: https://t.me/coldernetwork
+
+####Version 1.0.0
 
 ### Quote
 >Sleep well, and take care.

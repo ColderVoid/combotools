@@ -13,6 +13,10 @@
 #          \  /   /
 #           \/___/
 
+# Contact info:
+# Telegram: https://t.me/coldervoid
+# Group: https://t.me/coldernetwork
+
 import hashlib
 import os
 import pathlib
@@ -26,8 +30,11 @@ import easygui
 
 def closing(message, sleep_time):
     print('')
-    print(message)
+    print(Fore.GREEN + message)
     print('')
+    print(Fore.WHITE + 'Telegram: https://t.me/coldervoid')
+    print(Fore.WHITE + 'Group: https://t.me/coldernetwork')
+    print(Fore.RESET + '')
 
     time.sleep(sleep_time)
     sys.exit()
@@ -40,7 +47,9 @@ def logo():
     print('/  ` /  \ |    |  \ |__  |__) |\ | |__   |  |  | /  \ |__) |__/ ' + '  ' + __index__)
     print('\__, \__/ |___ |__/ |___ |  \ | \| |___  |  |/\| \__/ |  \ |  \ ' + '  ' + 'version: ' + __version__)
     print('')
-    print('')
+    print('Telegram: https://t.me/coldervoid')
+    print('Group: https://t.me/coldernetwork')
+    print(Fore.RESET + '')
 
 
 def menu():
@@ -52,8 +61,8 @@ def menu():
     print(Fore.CYAN + '[DOMAIN CHANGE] -> 5')
     print(Fore.CYAN + '[FILE SPLIT (BY LINES)] -> 6')
     print(Fore.CYAN + '[DUPLICATE REMOVER] -> 7')
-    print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> x')
-    print(Fore.CYAN + '[WORDLIST COMBO] -> y')
+    print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> 8')
+    print(Fore.CYAN + '[WORDLIST COMBO] -> 9')
 
     print('')
 
@@ -603,13 +612,77 @@ def domain_change():
 
 
 def file_split():
-    print("file split")
+    count = 0
+    final_count = 0
+    c_error = 0
+    n_split = 0
+    final = []
+    default_lines = 10000
+    default_text = ''
+    lower = 0
+    upper = 999999999
+    title = '[COMBOTOOLS]'
+    text1 = 'Input number of lines'
+    text2 = 'Input name of file'
 
-    #
+    try:
+        lines = easygui.integerbox(text1, title, default_lines, lower, upper)
+    except:
+        lines = 100000
 
-    #    TODO  file_split
+    try:
+        name_of_file = easygui.enterbox(text2, title, default_text)
+    except:
+        name_of_file = 'split'
 
-    #
+
+    print('')
+    print('[LINES]: ' + str(lines))
+    print('[NAME OF FILE]: ' + str(name_of_file))
+    print('')
+
+    data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
+
+    file_dest = file_select(multiple=False, title=False)
+    file = open(file_dest, encoding='ISO-8859-1')
+    memory_access_a = memory_access(file, file_dest)
+
+    for line in tqdm(memory_access_a, desc="[COMBOS LEFT]", unit=' lines',
+                     bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
+        count += 1
+        final_count += 1
+
+        try:
+            final.append(line)
+        except:
+            c_error += 1
+
+        if count >= lines:
+            n_split += 1
+            split_file = open(data_folder_name + '/' + time_folder_name + '/' + name_of_file + ' ' + str(n_split) + '[COMBOTOOLS].txt', 'wb')
+
+            for combo_line in final:
+                split_file.write(combo_line.encode('ISO-8859-1', 'ignore'))
+
+            count = 0
+            final = []
+            split_file.close()
+
+    if True and final is not []:
+        n_split += 1
+        split_file = open(data_folder_name + '/' + time_folder_name + '/split ' + str(n_split) + '[COMBOTOOLS].txt', 'wb')
+        for combo_line in final:
+            split_file.write(combo_line.encode('ISO-8859-1', 'ignore'))
+
+        split_file.close()
+
+    print('')
+    print('[TOTAL LINES]: ' + str(final_count))
+    print('[TOTAL FILES]: ' + str(n_split))
+    print('[ERRORS]: ' + str(c_error))
+    print('')
+
+    input('Done! Press any key...')
 
 
 def remove_duplicates():
@@ -752,7 +825,7 @@ def wordlist_combo():
 if __name__ == '__main__':
     __index__ = 'combotools'
     __title__ = __index__ + ' by COLDERVOID'
-    __version__ = '0.8.9_0'
+    __version__ = '1.0.0'
     __DEBUG__ = False
 
     try:
@@ -771,7 +844,7 @@ if __name__ == '__main__':
 
     os.system("title " + __title__)
 
-    logo()  # wyswietl logo
+    logo()
 
     selector = menu()
 
