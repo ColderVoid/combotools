@@ -20,7 +20,6 @@ import sys
 from datetime import datetime
 from tqdm import tqdm
 from colorama import Fore
-from math import sin, cos
 import time
 import easygui
 
@@ -51,13 +50,10 @@ def menu():
     print(Fore.CYAN + '[COMBO STATS] -> 3')
     print(Fore.CYAN + '[COMBO MERGE] -> 4')
     print(Fore.CYAN + '[DOMAIN CHANGE] -> 5')
-    print(Fore.CYAN + '[FILE SPLIT] -> 6')
+    print(Fore.CYAN + '[FILE SPLIT (BY LINES)] -> 6')
     print(Fore.CYAN + '[DUPLICATE REMOVER] -> 7')
-    print(Fore.CYAN + '[DONUT] -> 8')
-
-    if __DEBUG__:
-        print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> x')
-        print(Fore.CYAN + '[WORDLIST COMBO] -> y')
+    print(Fore.CYAN + '[DOMAINS to YOPMAIL] -> x')
+    print(Fore.CYAN + '[WORDLIST COMBO] -> y')
 
     print('')
 
@@ -160,6 +156,7 @@ def check_dir():
 def checkbox(question, single):
     title = "COMBOTOOLS"
     listOfOptions = ['gmail.', 'hotmail.', 'yahoo.', 'aol.', 'live.', 'outlook.', 'msn.']
+    easygui.choicebox(question, title, listOfOptions)
 
     if __DEBUG__:
         listOfOptions.append('yopmail.')
@@ -799,9 +796,10 @@ if __name__ == '__main__':
     elif selector == '7':
         remove_duplicates()
 
-    elif selector == 'x' and __DEBUG__:
+    elif selector == '8':
         domains_to_yopmail()
-    elif selector == 'y' and __DEBUG__:
+
+    elif selector == '9':
         wordlist_combo()
 
     else:
