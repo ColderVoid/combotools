@@ -603,6 +603,10 @@ def combo_merge():
                 count = 0
                 complete = []
 
+    if True:
+        for combo_line in complete:
+            combo_final.write(combo_line.encode('utf-8', 'ignore'))
+
     # stats
     print('')
     print('[LINES MERGED]: ' + str(final_count))
