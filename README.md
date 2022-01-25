@@ -3,7 +3,7 @@
 - combo sorter
 - email:pass to user:pass
 - combo stats
-- combo merge (ALPHA)
+- combo merge
 - domain change
 - ~~file split~~
 - duplicate remover
