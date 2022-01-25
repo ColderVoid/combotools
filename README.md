@@ -1,4 +1,4 @@
-##Only working with python 3.9.10 or lower
+## Only working with python 3.9.10 or lower
 
 ## Functionalities:
 
@@ -17,7 +17,7 @@
 - Telegram: https://t.me/coldervoid
 - Group: https://t.me/coldernetwork
 
-####Version 1.0.0
+#### Version 1.0.0
 
 ### Quote
 >Sleep well, and take care.
