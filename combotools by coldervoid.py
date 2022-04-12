@@ -307,7 +307,7 @@ def memory_access(file, file_dest):
     return memory_access_a
 
 
-def sort():
+def sort(global_encoding):
     banned_emails = checkbox(question='Choose domains to sort: ', single=False)
     sorted_table_wo_banned = []
     dumped_email = []
@@ -319,7 +319,7 @@ def sort():
 
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
-    file = open(file_select(multiple=False, title=False), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding=global_encoding)
     sorted_combolist = open(data_folder_name + '/' + time_folder_name + '/single domain [COMBOTOOLS].txt', 'wb')
     dumped_combo = open(data_folder_name + '/' + time_folder_name + '/dumped.txt', 'wb')
     domain_list = open(data_folder_name + '/' + time_folder_name + '/domains.txt', 'wb')
@@ -377,7 +377,7 @@ def sort():
     input('Done! Press any key...')
 
 
-def domains_to_yopmail():
+def domains_to_yopmail(global_encoding):
     complete = []
     split_symbol = ':'
     count = 0
@@ -385,7 +385,7 @@ def domains_to_yopmail():
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
     yopmail_domains = open(data_folder_name + '/' + time_folder_name + '/domains to yopmain [COMBOTOOLS].txt', 'wb')
-    file = open(file_select(multiple=False, title=False), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding=global_encoding)
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
@@ -424,7 +424,7 @@ def domains_to_yopmail():
     input('Done! Press any key...')
 
 
-def email_to_user():
+def email_to_user(global_encoding):
     split_symbol = ':'
     count = 0
     complete = []
@@ -433,7 +433,7 @@ def email_to_user():
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
     user_pass = open(data_folder_name + '/' + time_folder_name + '/email to user [COMBOTOOLS].txt', 'wb')
-    file = open(file_select(multiple=False, title=False), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding=global_encoding)
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
@@ -464,11 +464,11 @@ def email_to_user():
     input('Done! Press any key...')
 
 
-def email_stats():
+def email_stats(global_encoding):
     count = 0
     domain_dict = {}
 
-    file = open(file_select(multiple=False, title=False), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding=global_encoding)
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
                      bar_format="{l_bar}%s{bar}%s{r_bar}" % (Fore.LIGHTRED_EX, Fore.RESET)):
@@ -513,7 +513,7 @@ def email_stats():
     input('Done! Press any key...')
 
 
-def combo_merge():
+def combo_merge(global_encoding):
     count = 0
     final_count = 0
     c_error = 0
@@ -528,7 +528,7 @@ def combo_merge():
 
     for file_dest in files:
 
-        file = open(file_dest, encoding='ISO-8859-1')
+        file = open(file_dest, encoding=global_encoding)
 
         print('')
         print(Fore.GREEN + "File: " + file_dest + Fore.RESET)
@@ -565,7 +565,7 @@ def combo_merge():
     input('Done! Press any key...')
 
 
-def domain_change():
+def domain_change(global_encoding):
     count = 0
     count_sorted = 0
     complete = []
@@ -574,7 +574,7 @@ def domain_change():
 
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
-    file = open(file_select(multiple=False, title=False), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding=global_encoding)
     changed_domain = open(data_folder_name + '/' + time_folder_name + '/changed domain [COMBOTOOLS].txt', 'wb')
 
     domain_to_change = inputbox(question='Type domain: ')
@@ -610,7 +610,7 @@ def domain_change():
     input('Done! Press any key...')
 
 
-def file_split():
+def file_split(global_encoding):
     count = 0
     final_count = 0
     c_error = 0
@@ -643,7 +643,7 @@ def file_split():
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
 
     file_dest = file_select(multiple=False, title=False)
-    file = open(file_dest, encoding='ISO-8859-1')
+    file = open(file_dest, encoding=global_encoding)
     memory_access_a = memory_access(file, file_dest)
 
     for line in tqdm(memory_access_a, desc="[COMBOS LEFT]", unit=' lines',
@@ -684,7 +684,7 @@ def file_split():
     input('Done! Press any key...')
 
 
-def remove_duplicates():
+def remove_duplicates(global_encoding):
     removed = 0
     stay = 0
     uni_error = 0
@@ -695,7 +695,7 @@ def remove_duplicates():
     data_folder, time_folder, data_folder_name, time_folder_name = check_dir()
     completed_lines_hash = set()
 
-    file = open(file_select(multiple=False, title=False), encoding='utf-8')
+    file = open(file_select(multiple=False, title=False), encoding=global_encoding)
     wo_duplicates = open(data_folder_name + '/' + time_folder_name + '/removed duplicates [COMBOTOOLS].txt', 'wb')
 
     for line in tqdm(file.readlines(), desc="[COMBOS LEFT]", unit=' lines',
@@ -748,7 +748,7 @@ def remove_duplicates():
     input('Done! Press any key...')
 
 
-def wordlist_combo():
+def wordlist_combo(global_encoding):
     split_symbol = ':'
     fake_password = '0'
 
@@ -775,7 +775,7 @@ def wordlist_combo():
     complete = []
 
     file_dest = file_select(multiple=False, title=False)
-    file = open(file_dest, encoding='ISO-8859-1')
+    file = open(file_dest, encoding=global_encoding)
     file_complete = open(data_folder_name + '/' + time_folder_name + '/wordlist combo [COMBOTOOLS].txt', 'wb')
 
     memory_access_a = memory_access(file, file_dest)
@@ -826,6 +826,7 @@ if __name__ == '__main__':
     __title__ = __index__ + ' by COLDERVOID'
     __version__ = '1.0.0'
     __DEBUG__ = False
+    encoding_var = 'ISO-8859-1'
 
     try:
         code = sys.argv[1]
@@ -848,31 +849,31 @@ if __name__ == '__main__':
     selector = menu()
 
     if selector == '1':
-        sort()
+        sort(encoding_var)
 
     elif selector == '2':
-        email_to_user()
+        email_to_user(encoding_var)
 
     elif selector == '3':
-        email_stats()
+        email_stats(encoding_var)
 
     elif selector == '4':
-        combo_merge()
+        combo_merge(encoding_var)
 
     elif selector == '5':
-        domain_change()
+        domain_change(encoding_var)
 
     elif selector == '6':
-        file_split()
+        file_split(encoding_var)
 
     elif selector == '7':
-        remove_duplicates()
+        remove_duplicates(encoding_var)
 
     elif selector == '8':
-        domains_to_yopmail()
+        domains_to_yopmail(encoding_var)
 
     elif selector == '9':
-        wordlist_combo()
+        wordlist_combo(encoding_var)
 
     else:
         closing(message="Goodbye!", sleep_time=2)
